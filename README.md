@@ -1,3 +1,2 @@
-# base-project-template
-
-This is to be used as a base project template that includes the architecture of the project.
+# Document Rag 
+This projects aims to chat with uploaded documents, including sentiment analysis and summarization.
