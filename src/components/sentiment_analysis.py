@@ -24,8 +24,8 @@ class SentimentAnalyzer:
     def __init__(self):
         try:
             openai_api_key = os.getenv("OPENAI_API_KEY")
-        except KeyError:
-            raise CustomException('OPENAI_API_KEY environment variable not found.')
+        except Exception:
+            raise KeyError('OPENAI_API_KEY environment variable not found.')
 
         self.llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo", api_key=openai_api_key)
 
