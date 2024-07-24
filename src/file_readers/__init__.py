@@ -148,3 +148,39 @@ class ReadFiles(Readers):
 
         except Exception as e:
             raise CustomException(e, sys)
+
+    def read_files_with_filenames(self):
+        """
+           This function reads all files in the specified directory, splits them into smaller documents using the provided text splitter,
+           and returns a dictionary containing the file names as keys and the splitted documents as values.
+
+           Parameters:
+           self (ReadFiles): The instance of the class.
+
+           Returns:
+           dict: A dictionary containing the file names as keys and the splitted documents as values. Each value is a dictionary with a "documents" key,
+           which holds the splitted documents.
+
+           Raises:
+           CustomException: If an error occurs during the file retrieval, reading, or splitting process.
+           """
+        try:
+            documents = {}
+            file_details = self.get_file_names_and_types()
+            for file in file_details:
+                reader = self.get_file_reader(file.file_type)
+                self.logger.info(
+                    f"{file.file_name} is a {file.file_type} file. {reader.__name__} method is called. "
+                )
+                splitted_docs = reader(file_path=file.file_full_path,
+                                       splitter=self.text_splitter)
+
+                documents[file.file_name] = {
+                    "documents": splitted_docs,
+                }
+
+            return documents
+        
+        except Exception as e:
+            raise CustomException(e, sys)
+            

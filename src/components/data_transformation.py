@@ -32,9 +32,12 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e, sys)
 
-    def transform_data(self):
+    def transform_data(self, return_file_names=False):
         try:
-            documents = self.reader.read_all_files()  # getting all the splitted documents
+            if not return_file_names:
+                documents = self.reader.read_all_files()  # getting all the splitted documents
+            else:
+                documents = self.reader.read_files_with_filenames()
             self.logger.info(f"Data transformation completed successfully.")
 
             return DataTransformationArtifact(documents=documents)

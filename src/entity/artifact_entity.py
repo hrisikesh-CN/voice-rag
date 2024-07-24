@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Union, List, Dict
 
 from langchain_core.documents import Document
 
@@ -10,5 +11,5 @@ class FileHandlerArtifact:
     
 @dataclass
 class DataTransformationArtifact:
-    documents: list[Document]
+    documents: Union[List[Document], Dict[str, Dict[str, List[Document]]]]
     
