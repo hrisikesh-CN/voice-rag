@@ -11,10 +11,12 @@ from src.components.qa_chain_formation import QAFormatter
 from src.logger import get_logger
 from src.exception import CustomException
 from src.constant import PINECONE_INDEX_NAME
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class QAPipeline:
-    embedding_function = OpenAIEmbeddings()
+    embedding_function = OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY"))
 
     def __init__(self, files: list) -> None:
         self.files = files
