@@ -11,14 +11,14 @@ class DataIngestion:
         self.logger = get_logger(__name__)
 
     def ingest(self,
-               files: list):
+               file):
         try:
-            for file in files:
-                file_name = file.filename.lower().replace(" ", "-").strip()
-                file_full_path = os.path.join(self.file_handler_config.file_storage_dir, file_name)
-                os.makedirs(os.path.dirname(file_full_path), exist_ok=True)
-                with open(file_full_path, "wb") as file_handler:
-                    file_handler.write(file.read())
+        
+            file_name = file.name.lower().replace(" ", "-").strip()
+            file_full_path = os.path.join(self.file_handler_config.file_storage_dir, file_name)
+            os.makedirs(os.path.dirname(file_full_path), exist_ok=True)
+            with open(file_full_path, "wb") as file_handler:
+                file_handler.write(file.read())
 
             file_handler_artifact = FileHandlerArtifact(
                 file_storage_dir=self.file_handler_config.file_storage_dir
