@@ -1,15 +1,12 @@
-import os, sys
+import sys
 
-from langchain_openai import ChatOpenAI
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-
-from src.entity.config_entity import DataTransformationConfig
-from src.entity.artifact_entity import FileHandlerArtifact, DataTransformationArtifact
-from src.logger import get_logger
 from langchain.chains.summarize import load_summarize_chain
+from langchain_openai import ChatOpenAI
 
-from src.file_readers import ReadFiles
+from src.entity.artifact_entity import DataTransformationArtifact
 from src.exception import CustomException
+from src.logger import get_logger
+
 
 class Summarizer:
     def __init__(self,
