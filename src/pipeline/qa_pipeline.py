@@ -18,8 +18,8 @@ load_dotenv()
 class QAPipeline:
     embedding_function = OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY"))
 
-    def __init__(self, files: list) -> None:
-        self.files = files
+    def __init__(self, file) -> None:
+        self.file = file
         self.logger = get_logger(__name__)
 
     def start_data_ingestion(self):
@@ -32,7 +32,7 @@ class QAPipeline:
         """
         try:
             data_ingestion = DataIngestion(FileHandlerConfig())
-            file_handler_artifact = data_ingestion.ingest(self.files)
+            file_handler_artifact = data_ingestion.ingest(self.file)
             return file_handler_artifact
         except Exception as e:
             raise CustomException(e, sys)
@@ -92,6 +92,20 @@ class QAPipeline:
 
             rag_chain = qa_formatter.form_qa_chain(embeddings=QAPipeline.embedding_function)
             return rag_chain.invoke(question)
+
+        except Exception as e:
+            raise CustomException(e, sys)
+
+    @staticmethod
+    def get_doc_chain():
+        try:
+            qa_formatter = QAFormatter(
+                llm=ChatOpenAI(model="gpt-3.5-turbo-0125")
+
+            )
+
+            rag_chain = qa_formatter.form_qa_chain(embeddings=QAPipeline.embedding_function)
+            return rag_chain
 
         except Exception as e:
             raise CustomException(e, sys)
