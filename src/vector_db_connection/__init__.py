@@ -58,11 +58,27 @@ class VectorStore:
         except Exception as e:
             raise CustomException(e, sys)
 
-    def get_vectorstore(self, embeddings: Embeddings, ):
+    def get_vectorstore(self, embeddings: Embeddings,
+                        namespace: str=None) -> PineconeVectorStore:
+        """
+        This function creates a PineconeVectorStore instance using the provided embeddings and namespace.
+
+        Parameters:
+        - embeddings (Embeddings): The embeddings to be used for vectorizing the documents.
+        - namespace (str): The namespace for the vector store.
+
+        Returns:
+        - PineconeVectorStore: An instance of PineconeVectorStore with the given embeddings and namespace.
+
+        Raises:
+        - CustomException: If an error occurs while creating the vector store.
+        """
         try:
+            # Create a Pinecone vector store with the given embeddings and namespace
             pinecone_index = self.create_index()
             pinecone_vector_store = PineconeVectorStore(pinecone_index,
-                                                        embeddings)
+                                                        embeddings,
+                                                        namespace=namespace)
             return pinecone_vector_store
 
         except Exception as e:
@@ -70,11 +86,15 @@ class VectorStore:
             raise CustomException(e, sys)
 
     def upload_document(self, embeddings: Embeddings,
-                        documents: list[list[Document]]):
+                        documents: list[list[Document]],
+                        namespace: str = None):
         try:
-            pinecone_vector_store = self.get_vectorstore(embeddings)
+            pinecone_vector_store = self.get_vectorstore(embeddings,
+                                                         namespace=namespace)
 
-            namespace = f"pinecone/{self.pinecone_index_name}"
+            if not namespace:
+                namespace = f"pinecone/{self.pinecone_index_name}"
+                
             record_manager = SQLRecordManager(
                 namespace, db_url="sqlite:///record_manager_cache.sql"
             )
@@ -82,10 +102,12 @@ class VectorStore:
             record_manager.create_schema()
 
             # upload docs
-            for doc in documents:
-                self.upload_docs_to_pinecone(docs=doc,
+            
+            self.upload_docs_to_pinecone(docs=documents,
                                              record_manager=record_manager,
                                              vectorstore=pinecone_vector_store)
+                
+                
 
             self.logger.info(f"Documents uploaded successfully to Pinecone index: {self.pinecone_index_name}")
 

@@ -42,8 +42,11 @@ class Readers:
             raise CustomException(e, sys)
 
     def read_pdf_pypdf(self, file_path, splitter: TextSplitter):
-        """Read PDFs, implement OCR for images within PDF, and return a list of chunks of documents."""
-        return self.load_and_split_document(PyPDFLoader, file_path, splitter, extract_images=True)
+        try:
+            """Read PDFs, implement OCR for images within PDF, and return a list of chunks of documents."""
+            return self.load_and_split_document(PyPDFLoader, file_path, splitter, extract_images=True)
+        except Exception as e:
+            raise CustomException(e, sys)
 
     def read_with_aws(self, file_path, splitter: TextSplitter, **kwargs):
         """Read PDFs,images using amazon texract, and return a list of chunks of documents.

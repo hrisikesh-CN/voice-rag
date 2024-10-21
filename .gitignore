@@ -161,3 +161,8 @@ cython_debug/
 artifacts
 tests/
 *.sql
+
+test_files
+test.py
+
+research

@@ -5,7 +5,9 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from src.entity.config_entity import DataTransformationConfig
 from src.entity.artifact_entity import FileHandlerArtifact, DataTransformationArtifact
 from src.logger import get_logger
-from src.file_readers import ReadFiles
+# from src.file_readers import ReadFiles
+from src.file_readers.readers import Readers
+from langchain_community.document_loaders import PyPDFLoader
 from src.exception import CustomException
 
 
@@ -17,8 +19,10 @@ class DataTransformation:
         self.data_transformation_config = data_transformation_config
         self.file_handler_artifact = file_handler_artifact
 
-        self.reader = ReadFiles(file_handler_artifact,
-                                self.get_splitter())
+        # self.reader = ReadFiles(file_handler_artifact,
+        #                         self.get_splitter())
+        
+        self.readers = Readers()
         self.logger = get_logger(__name__)
 
     @staticmethod
@@ -32,15 +36,31 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e, sys)
 
-    def transform_data(self, return_file_names=False):
+    def transform_data(self)->list[DataTransformationArtifact]:
         try:
-            if not return_file_names:
-                documents = self.reader.read_all_files()  # getting all the splitted documents
-            else:
-                documents = self.reader.read_files_with_filenames()
-            self.logger.info(f"Data transformation completed successfully.")
-
-            return DataTransformationArtifact(documents=documents)
+            data_transformation_artifacts = [] 
+            for file in os.listdir(self.file_handler_artifact.file_storage_dir):
+                file_full_path = os.path.join(self.file_handler_artifact.file_storage_dir,
+                                              file)
+                documents = PyPDFLoader(file_full_path)
+                documents = documents.load()
+                
+                # Splitting the documents
+                splitter = self.get_splitter()
+                documents = splitter.split_documents(documents)
+                    
+            
+                                
+                
+                
+                
+                
+                 # getting all the splitted documents
+                artifact = DataTransformationArtifact(documents=documents)
+                
+                data_transformation_artifacts.append(artifact)
+                
+            return data_transformation_artifacts
 
         except Exception as e:
             raise CustomException(e, sys)

@@ -53,7 +53,7 @@ class QAPipeline:
             raise CustomException(e, sys)
 
     def start_vector_ingestion(self,
-                               data_transformation_artifact: DataTransformationArtifact):
+                               data_transformation_artifacts: list[DataTransformationArtifact]):
         """This method initiates the vector ingestion process and
         returns the vector store with the uploaded documents.
 
@@ -61,7 +61,7 @@ class QAPipeline:
             VectorStore: uploaded documents
         """
         try:
-            vector_ingestion = VectorIngestion(data_transformation_artifact)
+            vector_ingestion = VectorIngestion(data_transformation_artifacts)
             vector_ingestion.ingest_data_to_vectordb(embeddings=self.embedding_function)
 
         except Exception as e:
@@ -74,8 +74,8 @@ class QAPipeline:
         """
         try:
             file_handler_artifact = self.start_data_ingestion()
-            data_transformation_artifact = self.start_data_transformation(file_handler_artifact)
-            self.start_vector_ingestion(data_transformation_artifact)
+            data_transformation_artifacts = self.start_data_transformation(file_handler_artifact)
+            self.start_vector_ingestion(data_transformation_artifacts)
 
             self.logger.info("Document Processing Completed.")
 

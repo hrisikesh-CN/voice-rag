@@ -7,4 +7,4 @@ LOG_DIR: str = "logs"
 FILE_STORAGE_ARTIFACT_DIR_NAME: str = "file_storage"
 
 #vector database
-PINECONE_INDEX_NAME: str = "chat-qa-index"
+PINECONE_INDEX_NAME: str = "poc-101-rag"

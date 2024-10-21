@@ -12,8 +12,8 @@ from src.vector_db_connection import VectorStore
 
 class VectorIngestion:
     def __init__(self,
-                 data_transformation_artifact: DataTransformationArtifact):
-        self.data_transformation_artifact = data_transformation_artifact
+                 data_transformation_artifacts: list[DataTransformationArtifact]):
+        self.data_transformation_artifact = data_transformation_artifacts
         self.logger = get_logger(__name__)
         self.vector_store = VectorStore(pinecone_index_name=PINECONE_INDEX_NAME,
 
@@ -23,12 +23,15 @@ class VectorIngestion:
                                 embeddings: Embeddings,
                                 ):
         try:
-            self.vector_store.upload_document(
-                embeddings=embeddings,
-                documents=self.data_transformation_artifact.documents
-            )
+            
+            for artifact in self.data_transformation_artifact:
+                
+                self.vector_store.upload_document(
+                    embeddings=embeddings,
+                    documents=artifact.documents
+                )
 
-            self.logger.info(f"Data ingested successfully to Pinecone index: {PINECONE_INDEX_NAME}")
+                self.logger.info(f"Data ingested successfully to Pinecone index: {PINECONE_INDEX_NAME}")
 
         except Exception as e:
             self.logger.error(f"Error occurred while ingesting data to VectorDB: {str(e)}")

@@ -4,29 +4,22 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 
 def chatbot(func):
-    if "messages" not in st.session_state.keys():
+    # Initialize chat messages if not present in session state
+    if "messages" not in st.session_state:
         st.session_state.messages = [{"role": "assistant",
                                       "content": "I am ready to use. Ask anything about the document."}]
 
-    # Display chat messages
-    if "uploaded_file_name" in st.session_state.keys():
-        if "no_of_file_uploads" in st.session_state.keys():
-            print("abb", st.session_state.no_of_file_uploads)  # [-1]["files"])
-        for message in st.session_state.messages:
-            with st.chat_message(message["role"]):
-                st.write(message["content"])
-
-    else:
-        if "messages" in st.session_state.keys():
-            del st.session_state.messages[1:]
-
-        print("anc")
+    # Display chat messages in sequence (preserve history)
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
 
     # Call the decorated function
     def execute(*args, **kwargs):
         func(*args, **kwargs)
 
     return execute
+
 
 
 page_markdown_default = """
