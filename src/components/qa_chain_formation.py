@@ -5,6 +5,7 @@ from langchain_core.embeddings import Embeddings
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_pinecone import PineconeVectorStore
+from langchain.prompts import PromptTemplate
 
 from src.constant import PINECONE_INDEX_NAME
 from src.exception import CustomException
@@ -70,10 +71,32 @@ class QAFormatter:
         """
         try:
             vector_store = self.get_vector_store(embeddings)
-            retriever = vector_store.as_retriever()
+            retriever = vector_store.as_retriever(search_type="mmr")
 
-            prompt = hub.pull("rlm/rag-prompt")
+            # prompt = hub.pull("rlm/rag-prompt")
+            # print(prompt)
 
+            template = """
+            You are an assistant for question-answering tasks. 
+            The information in the context might be scattered or unstructured. 
+            Reorganize the context as needed to provide a clear and direct answer to the question. 
+            If the necessary information is not available, say that you don't know. 
+            Focus on accuracy and do not summarize unnecessarily.
+
+            Question: {question}
+
+            Context: {context}
+
+            Answer:
+            """
+
+            # Create a LangChain PromptTemplate
+            prompt = PromptTemplate(
+                input_variables=["question", "context"],
+                template=template
+            )
+            
+            
             def format_docs(docs):
                 """
                 Helper function to format retrieved documents.

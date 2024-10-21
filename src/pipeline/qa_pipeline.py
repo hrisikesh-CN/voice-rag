@@ -86,7 +86,7 @@ class QAPipeline:
     def start_qa(question):
         try:
             qa_formatter = QAFormatter(
-                llm=ChatOpenAI(model="gpt-3.5-turbo-0125")
+                llm=ChatOpenAI(model="gpt-4o-mini")
 
             )
 
@@ -100,7 +100,7 @@ class QAPipeline:
     def get_doc_chain():
         try:
             qa_formatter = QAFormatter(
-                llm=ChatOpenAI(model="gpt-3.5-turbo-0125")
+                llm=ChatOpenAI(model="gpt-4o-mini")
 
             )
 
