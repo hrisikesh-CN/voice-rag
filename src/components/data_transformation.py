@@ -5,8 +5,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from src.entity.config_entity import DataTransformationConfig
 from src.entity.artifact_entity import FileHandlerArtifact, DataTransformationArtifact
 from src.logger import get_logger
-# from src.file_readers import ReadFiles
-from src.file_readers.readers import Readers
+
 from langchain_community.document_loaders import PyPDFLoader
 from src.exception import CustomException
 
@@ -19,10 +18,8 @@ class DataTransformation:
         self.data_transformation_config = data_transformation_config
         self.file_handler_artifact = file_handler_artifact
 
-        # self.reader = ReadFiles(file_handler_artifact,
-        #                         self.get_splitter())
+       
         
-        self.readers = Readers()
         self.logger = get_logger(__name__)
 
     @staticmethod
