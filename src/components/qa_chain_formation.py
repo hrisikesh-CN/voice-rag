@@ -51,7 +51,6 @@ class QAFormatter:
             vector_store = VectorStore(PINECONE_INDEX_NAME)
             return vector_store.get_vectorstore(embeddings=embeddings)
         except Exception as e:
-            self.logger.error(f"Error in getting vector store: {str(e)}")
             raise CustomException(e, sys)
 
     def form_qa_chain(self, embeddings: Embeddings) -> RunnablePassthrough:
@@ -118,5 +117,4 @@ class QAFormatter:
             return rag_chain
 
         except Exception as e:
-            self.logger.error(f"Error in forming QA chain: {str(e)}")
             raise CustomException(e, sys)

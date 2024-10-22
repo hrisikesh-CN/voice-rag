@@ -34,5 +34,4 @@ class VectorIngestion:
                 self.logger.info(f"Data ingested successfully to Pinecone index: {PINECONE_INDEX_NAME}")
 
         except Exception as e:
-            self.logger.error(f"Error occurred while ingesting data to VectorDB: {str(e)}")
             raise CustomException(e, sys)

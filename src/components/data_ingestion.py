@@ -27,5 +27,4 @@ class DataIngestion:
 
 
         except Exception as e:
-            self.logger.error(f"Error occurred during data ingestion: {str(e)}")
             raise CustomException(e, sys)

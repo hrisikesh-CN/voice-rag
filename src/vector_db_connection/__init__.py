@@ -43,7 +43,6 @@ class VectorStore:
             return pinecone_index
 
         except Exception as e:
-            self.logger.error(f"Error occurred while creating index: {str(e)}")
             raise CustomException(e, sys)
 
     @staticmethod
@@ -82,7 +81,6 @@ class VectorStore:
             return pinecone_vector_store
 
         except Exception as e:
-            self.logger.error(f"Error occurred while creating vector store: {str(e)}")
             raise CustomException(e, sys)
 
     def upload_document(self, embeddings: Embeddings,
@@ -112,5 +110,4 @@ class VectorStore:
             self.logger.info(f"Documents uploaded successfully to Pinecone index: {self.pinecone_index_name}")
 
         except Exception as e:
-            self.logger.error(f"Error occurred while uploading documents: {str(e)}")
             raise CustomException(e, sys)
